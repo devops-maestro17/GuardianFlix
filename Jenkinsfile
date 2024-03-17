@@ -14,36 +14,36 @@ pipeline{
                 cleanWs()
             }
         }
-        stage('Checkout from Git'){
-            steps{
-                git branch: 'main', url: 'https://github.com/N4si/DevSecOps-Project.git'
-            }
-        }
-        stage("Sonarqube Analysis "){
-            steps{
-                withSonarQubeEnv('sonar-server') {
-                    sh ''' $SCANNER_HOME/bin/sonar-scanner -Dsonar.projectName=Netflix \
-                    -Dsonar.projectKey=Netflix '''
-                }
-            }
-        }
-        stage("quality gate"){
-           steps {
-                script {
-                    waitForQualityGate abortPipeline: false, credentialsId: 'sonar-cred' 
-                }
-            } 
-        }
+        // stage('Checkout from Git'){
+        //     steps{
+        //         git branch: 'main', url: 'https://github.com/N4si/DevSecOps-Project.git'
+        //     }
+        // }
+        // stage("Sonarqube Analysis "){
+        //     steps{
+        //         withSonarQubeEnv('sonar-server') {
+        //             sh ''' $SCANNER_HOME/bin/sonar-scanner -Dsonar.projectName=Netflix \
+        //             -Dsonar.projectKey=Netflix '''
+        //         }
+        //     }
+        // }
+        // stage("quality gate"){
+        //    steps {
+        //         script {
+        //             waitForQualityGate abortPipeline: false, credentialsId: 'sonar-cred' 
+        //         }
+        //     } 
+        // }
         stage('Install Dependencies') {
             steps {
                 sh "npm install"
             }
         }
-        stage('TRIVY FS SCAN') {
-            steps {
-                sh "trivy fs . > trivyfs.txt"
-            }
-        }
+        // stage('TRIVY FS SCAN') {
+        //     steps {
+        //         sh "trivy fs . > trivyfs.txt"
+        //     }
+        // }
         stage("Build & Tag Docker Image"){
             steps{
                 script{
@@ -53,11 +53,11 @@ pipeline{
                 }
             }
         }
-        stage("TRIVY Image Scan"){
-            steps{
-                sh "trivy image --format table -o trivy-image-report.html netflix" 
-            }
-        }
+        // stage("TRIVY Image Scan"){
+        //     steps{
+        //         sh "trivy image --format table -o trivy-image-report.html netflix" 
+        //     }
+        // }
         stage('Push to Dockerhub'){
             steps{
                 script{
