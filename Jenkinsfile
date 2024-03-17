@@ -62,8 +62,8 @@ pipeline{
             steps{
                 script{
                    withDockerRegistry(credentialsId: 'docker', toolName: 'docker'){
-                        sh "docker tag netflix containerizeOps/netflix:1.0"
-                        sh "docker push containerizeOps/netflix:1.0"
+                        sh "docker tag netflix containerizeops/netflix:1.0"
+                        sh "docker push containerizeops/netflix:1.0"
                     }
                 }
             }
@@ -80,7 +80,7 @@ pipeline{
                         git config user.name "devops-maestro17"
                         BUILD_NUMBER=${BUILD_NUMBER}
                         sed -i "s/replaceImageTag/${BUILD_NUMBER}/g" k8s-manifests/deployment.yml
-                        git add deployment.yml
+                        git add k8s-manifests/deployment.yml
                         git commit -m "Update deployment image to version ${BUILD_NUMBER}"
                         git push https://${GITHUB_TOKEN}@github.com/${GIT_USER_NAME}/${GIT_REPO_NAME} HEAD:main
                     '''
